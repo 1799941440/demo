@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.demo.mapper.UserMapper">
+
+    <sql id="base">
+        SELECT `user`.id,
+               `user`.name,
+               `user`.password,
+               `user`.identity,
+               `user`.shopId,
+               `user`.phone,
+               `user`.balance,
+               `user`.sex,
+               `user`.age,
+               `user`.icon,
+               `user`.isDelete,
+               `user`.delReason,
+               address.id as commomAddressId,
+               shop.shopName,
+               shop.image as shopImage
+        FROM user
+                 LEFT JOIN address on address.userId = `user`.id and address.isCommonAddress = 1
+                 LEFT JOIN shop ON shop.id = `user`.shopId
+    </sql>
+    <select id="getForAdmin" resultType="UserInfo">
+        <include refid="base"/>
+        <where>
+            <if test="userName!=null">
+                userName LIKE '%${userName}%'
+            </if>
+            <if test="isDelete!=null">
+                and `user`.isDelete = #{isDelete}
+            </if>
+        </where>
+        ORDER BY id ASC
+        LIMIT #{start},#{rows}
+    </select>
+
+    <select id="findUserById" resultType="User">
+        <include refid="base"/>
+        <where>
+            `user`.id = #{id}
+        </where>
+    </select>
+
+    <select id="getCountForAdmin" resultType="Integer">
+        SELECT count(*)
+        FROM user
+        <where>
+            <if test="userName!=null">
+                userName LIKE '%${userName}%'
+            </if>
+            <if test="isDelete!=null">
+                and `user`.isDelete = #{isDelete}
+            </if>
+        </where>
+    </select>
+
+    <select id="login" resultType="UserInfo">
+        <include refid="base"/>
+        WHERE
+        (
+        name = #{name}
+        AND password = #{password}
+        )
+        OR (
+        phone =  #{name}
+        AND password = #{password}
+        )
+        AND `user`.isDelete=0
+    </select>
+
+    <sql id="update">
+        <trim suffixOverrides=",">
+            <if test="name!=null">`name`=#{name},</if>
+            <if test="password!=null">password=#{password},</if>
+            <if test="identity!=null">`identity`=#{identity},</if>
+            <if test="shopId!=null">shopId=#{shopId},</if>
+            <if test="phone!=null">phone=#{phone},</if>
+            <if test="sex!=null">sex=#{sex},</if>
+            <if test="age!=null">age=#{age},</if>
+            <if test="icon!=null">icon=#{icon},</if>
+            <if test="isDelete!=null">isDelete=#{isDelete},</if>
+            <if test="delReason!=null">delReason=#{delReason}</if>
+        </trim>
+    </sql>
+    <update id="updateUser" parameterType="User">
+        update `user`
+        <set>
+            <include refid="update"/>
+        </set>
+        <where>
+            id=#{id}
+        </where>
+    </update>
+
+    <update id="updateUserAmount" parameterType="User">
+        update `user`
+        <set>
+            <if test="balance!=null">balance=#{balance}</if>
+        </set>
+        <where>
+            id=#{id}
+        </where>
+    </update>
+
+    <update id="resetPassword">
+        update `user`
+        <set>
+            password='4297f44b13955235245b2497399d7a93'
+        </set>
+        <where>
+            id=#{id}
+        </where>
+    </update>
+
+    <update id="logicDelete">
+        update `user`
+        <set>
+            isDelete= #{isDelete},
+            delReason = #{delReason}
+        </set>
+        <where>
+            id=#{id}
+        </where>
+    </update>
+
+    <update id="unDelete">
+        update `user`
+        <set>
+            isDelete=0
+        </set>
+        <where>
+            id=#{id}
+        </where>
+    </update>
+
+    <delete id="delete">
+        delete from `USER`
+        <where>
+            id =  #{id}
+        </where>
+    </delete>
+</mapper>

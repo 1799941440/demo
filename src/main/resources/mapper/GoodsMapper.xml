@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.demo.mapper.GoodsMapper">
+
+    <sql id="base_admin">
+        SELECT
+            goods.id,goods.shopId,
+            goods.`name`,goods.classify,
+            goods.brand,goods.capacity,
+            goods.weight,goods.unit,
+            goods.p1,goods.p2,goods.p3,
+            goods.count,goods.price,
+            goods.image,goods.state,
+            goods.`describe`,goods.isDelete,
+            goods.delReason,shop.shopName,
+            shop.address AS shopAddress,
+            ( SELECT count( * ) FROM orderdetail WHERE orderdetail.targetId = goods.id AND orderdetail.type = 1 ) AS sales,
+            ( SELECT count( * ) FROM collect WHERE collect.targetId = goods.id AND collect.type = 1 ) AS collect,
+        FROM goods
+        LEFT JOIN shop ON goods.shopId = shop.id
+    </sql>
+    <select id="getForAdmin" resultType="GoodsInfo">
+        <include refid="base_admin"/>
+        <where>
+            <if test="shopId!=null">
+                shopId = #{shopId}
+            </if>
+            <if test="name!=null">
+                and goods.`name` LIKE '%${name}%'
+            </if>
+            <if test="classify!=null">
+                and goods.classify = #{classify}
+            </if>
+            <if test="state!=null">
+                and goods.state = #{state}
+            </if>
+            <if test="isDelete!=null">
+                and goods.isDelete = #{isDelete}
+            </if>
+        </where>
+        ORDER BY id ASC
+        LIMIT #{start},#{rows}
+    </select>
+
+    <select id="getCountForAdmin" resultType="Integer">
+        SELECT count(*)
+        FROM goods
+        <where>
+            <if test="shopId!=null">
+                shopId = #{shopId}
+            </if>
+            <if test="name!=null">
+                and goods.`name` LIKE '%${name}%'
+            </if>
+            <if test="classify!=null">
+                and goods.classify = #{classify}
+            </if>
+            <if test="state!=null">
+                and goods.state = #{state}
+            </if>
+            <if test="isDelete!=null">
+                and goods.isDelete = #{isDelete}
+            </if>
+        </where>
+    </select>
+
+    <select id="getForUser" resultType="GoodsInfo">
+        SELECT
+        goods.id,goods.shopId,
+        goods.`name`,goods.classify,
+        goods.brand,goods.capacity,
+        goods.weight,goods.unit,
+        goods.p1,goods.p2,goods.p3,
+        goods.count,goods.price,
+        goods.image,goods.state,
+        goods.`describe`,goods.isDelete,
+        goods.delReason,shop.shopName,
+        shop.address AS shopAddress,
+        ( SELECT count( * ) FROM orderdetail WHERE orderdetail.targetId = goods.id AND orderdetail.type = 1 ) AS sales,
+        ( SELECT count( * ) FROM collect WHERE collect.targetId = goods.id AND collect.type = 1 ) AS collect,
+        (SELECT COALESCE( count( * ) )
+        FROM collect
+        WHERE collect.targetId = goods.id
+        AND collect.type = 1
+        AND collect.userId = #{userId}
+        ) AS isCollect
+        FROM goods
+        LEFT JOIN shop ON goods.shopId = shop.id
+        <where>
+            <if test="name!=null">
+                goods.`name` LIKE '%${name}%'
+            </if>
+            <if test="classify!=null">
+                and goods.classify = #{classify}
+            </if>
+            <if test="brand!=null">
+                and goods.brand = #{brand}
+            </if>
+            <if test="p1!=null">
+                and goods.p1 = #{p1}
+            </if>
+            <if test="p2!=null">
+                and goods.p2 = #{p2}
+            </if>
+            <if test="p3!=null">
+                and goods.p3 = #{p3}
+            </if>
+            and goods.isDelete = 0
+            and goods.state = 0
+        </where>
+        ORDER by sales DESC
+        LIMIT #{start},#{rows}
+    </select>
+
+    <select id="getCountForUser" resultType="Integer">
+        SELECT count(*)
+        FROM goods
+        <where>
+            <if test="name!=null">
+                goods.`name` LIKE '%${name}%'
+            </if>
+            <if test="classify!=null">
+                and goods.classify = #{classify}
+            </if>
+            <if test="brand!=null">
+                and goods.brand = #{brand}
+            </if>
+            <if test="p1!=null">
+                and goods.p1 = #{p1}
+            </if>
+            <if test="p2!=null">
+                and goods.p2 = #{p2}
+            </if>
+            <if test="p3!=null">
+                and goods.p3 = #{p3}
+            </if>
+            and goods.isDelete = 0
+            and goods.state = 0
+        </where>
+    </select>
+
+    <select id="getById" resultType="GoodsInfo">
+        <include refid="base_admin"/>
+        <where>
+            goods.id = #{id}
+        </where>
+    </select>
+
+    <update id="logicDelete">
+        update `goods`
+        <set>
+            isDelete= #{isDelete},
+            delReason = #{delReason}
+        </set>
+        <where>
+            id=#{id}
+        </where>
+    </update>
+
+    <update id="unDelete">
+        update `goods`
+        <set>
+            isDelete=0
+        </set>
+        <where>
+            id=#{id}
+        </where>
+    </update>
+
+    <delete id="delete">
+        delete from goods
+        <where>
+            id =  #{id}
+        </where>
+    </delete>
+</mapper>
