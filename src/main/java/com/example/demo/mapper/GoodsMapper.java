@@ -7,7 +7,6 @@ import com.example.demo.queryparam.GoodsQuery;
 import java.util.List;
 
 public interface GoodsMapper extends BaseMapper<GoodsInfo, GoodsQuery> {
-    GoodsInfo getById(Integer id);
-    Integer getCountForUser(GoodsQuery g);
     List<GoodsInfo> getForUser(GoodsQuery g);
+    Integer getCountForUser(GoodsQuery g);
 }

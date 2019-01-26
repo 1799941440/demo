@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.demo.mapper.">
+
+    <sql id="base">
+        SELECT
+    </sql>
+
+    <select id="getForAdmin" resultType="">
+        <include refid="base"/>
+        <where>
+            <if test="isDelete!=null">
+                and ``.isDelete = #{isDelete}
+            </if>
+        </where>
+        ORDER BY id ASC
+        LIMIT #{start},#{rows}
+    </select>
+
+    <select id="getCountForAdmin" resultType="Integer">
+        SELECT count(*)
+        FROM ``
+        <where>
+            <if test="isDelete!=null">
+                and ``.isDelete = #{isDelete}
+            </if>
+        </where>
+    </select>
+
+    <select id="getById" resultType="">
+        <include refid="base"/>
+        <where>
+            ``.id = #{id}
+        </where>
+    </select>
+
+    <update id="logicDelete">
+        update
+        <set>
+            isDelete= #{isDelete},
+            delReason = #{delReason}
+        </set>
+        <where>
+            id=#{id}
+        </where>
+    </update>
+
+    <update id="unDelete">
+        update
+        <set>
+            isDelete=0
+        </set>
+        <where>
+            id=#{id}
+        </where>
+    </update>
+
+    <delete id="delete">
+        delete from
+        <where>
+            id =  #{id}
+        </where>
+    </delete>
+</mapper>

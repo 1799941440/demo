@@ -10,7 +10,7 @@
             goods.weight,goods.unit,
             goods.p1,goods.p2,goods.p3,
             goods.count,goods.price,
-            goods.image,goods.state,
+            goods.image,goods.isDelete,
             goods.`describe`,goods.isDelete,
             goods.delReason,shop.shopName,
             shop.address AS shopAddress,
@@ -31,8 +31,8 @@
             <if test="classify!=null">
                 and goods.classify = #{classify}
             </if>
-            <if test="state!=null">
-                and goods.state = #{state}
+            <if test="isDelete!=null">
+                and goods.isDelete = #{isDelete}
             </if>
             <if test="isDelete!=null">
                 and goods.isDelete = #{isDelete}
@@ -55,8 +55,8 @@
             <if test="classify!=null">
                 and goods.classify = #{classify}
             </if>
-            <if test="state!=null">
-                and goods.state = #{state}
+            <if test="isDelete!=null">
+                and goods.isDelete = #{isDelete}
             </if>
             <if test="isDelete!=null">
                 and goods.isDelete = #{isDelete}
@@ -72,7 +72,7 @@
         goods.weight,goods.unit,
         goods.p1,goods.p2,goods.p3,
         goods.count,goods.price,
-        goods.image,goods.state,
+        goods.image,goods.isDelete,
         goods.`describe`,goods.isDelete,
         goods.delReason,shop.shopName,
         shop.address AS shopAddress,
@@ -106,7 +106,7 @@
                 and goods.p3 = #{p3}
             </if>
             and goods.isDelete = 0
-            and goods.state = 0
+            and goods.isDelete = 0
         </where>
         ORDER by sales DESC
         LIMIT #{start},#{rows}
@@ -135,7 +135,7 @@
                 and goods.p3 = #{p3}
             </if>
             and goods.isDelete = 0
-            and goods.state = 0
+            and goods.isDelete = 0
         </where>
     </select>
 

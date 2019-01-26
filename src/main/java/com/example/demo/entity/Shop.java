@@ -11,7 +11,6 @@ public class Shop extends BaseEntity {
     private Integer userId;
     private String city;
     private String address;
-    private Integer state;
     @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss",timezone = "GMT+8")
     private Date applyDate;
     @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss",timezone = "GMT+8")
@@ -56,14 +55,6 @@ public class Shop extends BaseEntity {
 
     public void setAddress(String address) {
         this.address = address;
-    }
-
-    public Integer getState() {
-        return state;
-    }
-
-    public void setState(Integer state) {
-        this.state = state;
     }
 
     @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss",timezone = "GMT+8")

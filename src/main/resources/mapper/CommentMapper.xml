@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.demo.mapper.CommentMapper">
+
+    <sql id="base">
+        SELECT `comment`.id,`comment`.themeId,`comment`.reply,`comment`.replyId,
+               `comment`.replyTime,
+               `user`.`name` as userName,
+               `user`.sex,`user`.age,`user`.icon,
+               ( SELECT count( * ) FROM zan WHERE zan.targetId = `comment`.id AND zan.type = 1 ) AS zan
+        FROM `comment`
+        LEFT JOIN `user` on `comment`.replyId = `user`.id
+    </sql>
+
+    <select id="getForAdmin" resultType="CommentInfo">
+        <include refid="base"/>
+        <where>
+            <if test="userId!=null">
+                `comment`.replyId = #{userId}
+            </if>
+            <if test="isDelete!=null">
+                and `comment`.isDelete = #{isDelete}
+            </if>
+            <if test="isDelete!=null">
+                and `comment`.themeId = #{themeId}
+            </if>
+        </where>
+        ORDER BY id ASC
+        LIMIT #{start},#{rows}
+    </select>
+
+    <select id="getCountForAdmin" resultType="Integer">
+        SELECT count(*)
+        FROM `comment`
+        <where>
+            <if test="userId!=null">
+                `comment`.replyId = #{userId}
+            </if>
+            <if test="isDelete!=null">
+                and `comment`.isDelete = #{isDelete}
+            </if>
+            <if test="isDelete!=null">
+                and `comment`.themeId = #{themeId}
+            </if>
+        </where>
+    </select>
+
+    <select id="getForUser" resultType="CommentInfo">
+        SELECT `comment`.id,`comment`.themeId,`comment`.reply,`comment`.replyId,
+               `comment`.replyTime,
+               `user`.`name` as userName,
+               `user`.sex,`user`.age,`user`.icon,
+               (SELECT COALESCE( count( * ) )
+                FROM zan
+                WHERE zan.targetId = `comment`.id
+                  AND zan.type = 1
+                  AND zan.userId = #{userId}
+               ) AS isZan,
+               ( SELECT count( * ) FROM zan WHERE zan.targetId = `comment`.id AND zan.type = 1 ) AS zan
+        FROM `comment`
+        LEFT JOIN `user` on `comment`.replyId = `user`.id
+        <where>
+            <if test="themeId!=null">
+                `comment`.themeId = #{themeId}
+            </if>
+            and `comment`.isDelete = 0
+        </where>
+        ORDER BY `comment`.replyTime ASC
+        LIMIT #{start},#{rows}
+    </select>
+
+    <select id="getCountForUser" resultType="Integer">
+        SELECT count(*)
+        FROM `comment`
+        <where>
+            <if test="themeId!=null">
+                `comment`.themeId = #{themeId}
+            </if>
+            and `comment`.isDelete = 0
+        </where>
+    </select>
+
+    <select id="getById" resultType="CommentInfo">
+        <include refid="base"/>
+        <where>
+            `comment`.id = #{id}
+        </where>
+    </select>
+
+    <update id="logicDelete">
+        update `comment`
+        <set>
+            isDelete= #{isDelete},
+            delReason = #{delReason}
+        </set>
+        <where>
+            id=#{id}
+        </where>
+    </update>
+
+    <update id="unDelete">
+        update `comment`
+        <set>
+            isDelete=0
+        </set>
+        <where>
+            id=#{id}
+        </where>
+    </update>
+
+    <delete id="delete">
+        delete from `comment`
+        <where>
+            id =  #{id}
+        </where>
+    </delete>
+</mapper>

@@ -18,9 +18,9 @@
                address.id as commomAddressId,
                shop.shopName,
                shop.image as shopImage
-        FROM user
-                 LEFT JOIN address on address.userId = `user`.id and address.isCommonAddress = 1
-                 LEFT JOIN shop ON shop.id = `user`.shopId
+        FROM `user`
+        LEFT JOIN address on address.userId = `user`.id and address.isCommonAddress = 1
+        LEFT JOIN shop ON shop.id = `user`.shopId
     </sql>
     <select id="getForAdmin" resultType="UserInfo">
         <include refid="base"/>

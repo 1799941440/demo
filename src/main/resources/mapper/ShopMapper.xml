@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.demo.mapper.ShopMapper">
+
+    <sql id="base">
+        SELECT shop.id,shop.image,shop.userId,shop.city,
+               shop.address,shop.applyDate,shop.enterDate,
+               shop.applyState,
+               user.`name` as userName
+        from shop
+        LEFT JOIN `user` on shop.userId = user. id
+    </sql>
+
+    <select id="getForAdmin" resultType="ShopInfo">
+        <include refid="base"/>
+        <where>
+            <if test="isDelete!=null">
+                and `shop`.isDelete = #{isDelete}
+            </if>
+            <if test="userId!=null">
+                and `shop`.userId = #{userId}
+            </if>
+            <if test="applyState!=null">
+                and `shop`.applyState = #{applyState}
+            </if>
+        </where>
+        ORDER BY id ASC
+        LIMIT #{start},#{rows}
+    </select>
+
+    <select id="getCountForAdmin" resultType="Integer">
+        SELECT count(*)
+        FROM `shop`
+        <where>
+            <if test="isDelete!=null">
+                and `shop`.isDelete = #{isDelete}
+            </if>
+            <if test="userId!=null">
+                and `shop`.userId = #{userId}
+            </if>
+            <if test="applyState!=null">
+                and `shop`.applyState = #{applyState}
+            </if>
+        </where>
+    </select>
+
+    <select id="getById" resultType="ShopInfo">
+        <include refid="base"/>
+        <where>
+            `shop`.id = #{id}
+        </where>
+    </select>
+
+    <update id="logicDelete">
+        update shop
+        <set>
+            isDelete= #{isDelete},
+            delReason = #{delReason}
+        </set>
+        <where>
+            id=#{id}
+        </where>
+    </update>
+
+    <update id="unDelete">
+        update shop
+        <set>
+            isDelete=0
+        </set>
+        <where>
+            id=#{id}
+        </where>
+    </update>
+
+    <delete id="delete">
+        delete from shop
+        <where>
+            id =  #{id}
+        </where>
+    </delete>
+</mapper>

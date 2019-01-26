@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.demo.mapper.ThemeMapper">
+
+    <sql id="base_admin">
+        SELECT theme.id,theme.title,theme.content,theme.images,
+               theme.imageCount,theme.userId,theme.goodsId,theme.carId,
+               theme.pushTime,theme.type,
+               `user`.`name` as userName,
+               `user`.sex,`user`.age,`user`.icon,
+               ( SELECT count( * ) FROM collect WHERE collect.targetId = theme.id AND collect.type = 0 ) AS collect,
+               ( SELECT count( * ) FROM zan WHERE zan.targetId = theme.id AND zan.type = 0 ) AS zan,
+        from theme
+        LEFT JOIN `user` on theme.userId = `user`.id
+    </sql>
+    <select id="getForAdmin" resultType="ThemeInfo">
+        <include refid="base_admin"/>
+        <where>
+            <if test="userId!=null">
+                theme.userId = #{userId}
+            </if>
+            <if test="type!=null">
+                and theme.type = #{type}
+            </if>
+            <if test="isDelete!=null">
+                and theme.isDelete = #{isDelete}
+            </if>
+        </where>
+        ORDER BY id ASC
+        LIMIT #{start},#{rows}
+    </select>
+
+    <select id="getCountForAdmin" resultType="Integer">
+        SELECT count(*)
+        FROM theme
+        <where>
+            <if test="userId!=null">
+                theme.userId = #{userId}
+            </if>
+            <if test="type!=null">
+                and theme.type = #{type}
+            </if>
+            <if test="isDelete!=null">
+                and theme.isDelete = #{isDelete}
+            </if>
+        </where>
+    </select>
+
+    <select id="getForUser" resultType="ThemeInfo">
+        SELECT theme.id,theme.title,theme.content,theme.images,
+            theme.imageCount,theme.userId,theme.goodsId,theme.carId,
+            theme.pushTime,theme.type,
+            `user`.`name` as userName,
+            `user`.sex,`user`.age,`user`.icon,
+            (SELECT COALESCE( count( * ) )
+            FROM collect
+            WHERE collect.targetId = theme.id
+            AND collect.type = 0
+            AND collect.userId = #{userId}
+            ) AS isCollect,
+            (SELECT COALESCE( count( * ) )
+            FROM zan
+            WHERE zan.targetId = theme.id
+            AND zan.type = 0
+            AND zan.userId = #{userId}
+            ) AS isZan,
+            ( SELECT count( * ) FROM collect WHERE collect.targetId = theme.id AND collect.type = 0 ) AS collect,
+            ( SELECT count( * ) FROM zan WHERE zan.targetId = theme.id AND zan.type = 0 ) AS zan,
+            goods.`name` as goodsName,
+            goods.image as goodsImage,
+            goods.price as goodsPrice,
+            car.brandId,car.classId,car.disId,
+            carbrand.`name` as carBrand,
+            carclass.className as carClass,
+            cardis.displacement as carDis
+        from theme
+        LEFT JOIN `user` on theme.userId = `user`.id
+        LEFT JOIN goods on theme.goodsId = goods.id
+        LEFT JOIN car on theme.carId = car.id
+        LEFT JOIN carbrand on car.brandId = carbrand.id
+        LEFT JOIN carclass on car.classId = carclass.id
+        LEFT JOIN cardis on car.disId = cardis.id
+
+        <where>
+            <if test="type!=null">
+                and theme.type = #{type}
+            </if>
+            and theme.isDelete = 0
+        </where>
+        ORDER by pushTime DESC
+        LIMIT #{start},#{rows}
+    </select>
+
+    <select id="getCountForUser" resultType="Integer">
+        SELECT count(*)
+        FROM theme
+        <where>
+            <if test="type!=null">
+                and theme.type = #{type}
+            </if>
+            and theme.isDelete = 0
+        </where>
+    </select>
+
+    <select id="getById" resultType="ThemeInfo">
+        <include refid="base_admin"/>
+        <where>
+            theme.id = #{id}
+        </where>
+    </select>
+
+    <update id="logicDelete">
+        update theme
+        <set>
+            isDelete= #{isDelete},
+            delReason = #{delReason}
+        </set>
+        <where>
+            id=#{id}
+        </where>
+    </update>
+
+    <update id="unDelete">
+        update theme
+        <set>
+            isDelete=0
+        </set>
+        <where>
+            id=#{id}
+        </where>
+    </update>
+
+    <delete id="delete">
+        delete from theme
+        <where>
+            id =  #{id}
+        </where>
+    </delete>
+</mapper>

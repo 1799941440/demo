@@ -8,4 +8,5 @@ public interface BaseMapper<T,Q extends BaseParam> {
     Integer logicDelete(BaseEntity be);
     Integer unDelete(Integer id);
     Integer delete(Integer id);
+    T getById(Integer id);
 }

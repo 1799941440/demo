@@ -119,19 +119,9 @@ public class JsonResult {
 		return rows;
 	}
 
-
-
-	public void setRows(List datas) {
-		this.rows = datas;
-	}
-
 	@Override
 	public String toString() {
 		return "jsonResult [success=" + success + ", msg=" + msg + ", total=" + total + ", pageSize=" + pageSize
 				+ ", rows=" + rows + "]";
 	}
-	
-	
-	
-	
 }
