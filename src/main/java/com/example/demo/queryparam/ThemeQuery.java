@@ -3,8 +3,8 @@ package com.example.demo.queryparam;
 import com.example.demo.base.BaseParam;
 
 public class ThemeQuery extends BaseParam {
-    private Integer userId;
     private Integer type;
+    private Integer userId;
     private Integer isDelete;
 
     public Integer getUserId() {

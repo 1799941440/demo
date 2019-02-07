@@ -13,6 +13,8 @@ logging:
   level:
     com.example.demo.mapper: debug
 
+  pattern:
+    console: "${CONSOLE_LOG_PATTERN:%clr(%d{${LOG_DATEFORMAT_PATTERN:yy-MM-dd HH:mm:ss}}){cyan} %clr(%-40.40logger{39}){cyan}%n%clr(${LOG_LEVEL_PATTERN:%-5p}) %m${LOG_EXCEPTION_CONVERSION_WORD:%n%wEx}%n}"
 server:
   servlet:
     context-path: /demo

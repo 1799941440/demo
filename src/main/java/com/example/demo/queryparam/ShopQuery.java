@@ -5,7 +5,16 @@ import com.example.demo.base.BaseParam;
 public class ShopQuery extends BaseParam {
     private Integer userId;
     private Integer isDelete;
+    private Integer state;
     private Integer applyState;
+
+    public Integer getState() {
+        return state;
+    }
+
+    public void setState(Integer state) {
+        this.state = state;
+    }
 
     public Integer getUserId() {
         return userId;

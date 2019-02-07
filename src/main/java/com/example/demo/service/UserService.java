@@ -13,6 +13,7 @@ import java.util.List;
 
 @Service
 public class UserService implements IUserService{
+
     @Resource
     private UserMapper userMapper;
 
@@ -44,6 +45,11 @@ public class UserService implements IUserService{
     @Override
     public Integer delete(Integer id) {
         return userMapper.delete(id);
+    }
+
+    @Override
+    public UserInfo getById(Integer id) {
+        return userMapper.getById(id);
     }
 
     @Override

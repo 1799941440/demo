@@ -4,10 +4,9 @@
 
     <sql id="base">
         SELECT `user`.id,
-               `user`.name,
-               `user`.password,
+               `user`.`name`,
+               `user`.`password`,
                `user`.identity,
-               `user`.shopId,
                `user`.phone,
                `user`.balance,
                `user`.sex,
@@ -15,12 +14,13 @@
                `user`.icon,
                `user`.isDelete,
                `user`.delReason,
-               address.id as commomAddressId,
-               shop.shopName,
-               shop.image as shopImage
+               COALESCE(address.id,0) as commomAddressId,
+               COALESCE(shop.id,0) AS shopId,
+               COALESCE(shop.shopName,'') AS shopName,
+               COALESCE(shop.image,'') as shopImage
         FROM `user`
-        LEFT JOIN address on address.userId = `user`.id and address.isCommonAddress = 1
-        LEFT JOIN shop ON shop.id = `user`.shopId
+             LEFT JOIN address on address.userId = `user`.id and address.isCommonAddress = 1
+             LEFT JOIN shop ON shop.userId = `user`.id
     </sql>
     <select id="getForAdmin" resultType="UserInfo">
         <include refid="base"/>
@@ -137,8 +137,6 @@
 
     <delete id="delete">
         delete from `USER`
-        <where>
-            id =  #{id}
-        </where>
+        where id =  #{id}
     </delete>
 </mapper>

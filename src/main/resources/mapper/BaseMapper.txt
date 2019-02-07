@@ -57,8 +57,6 @@
 
     <delete id="delete">
         delete from
-        <where>
-            id =  #{id}
-        </where>
+        where id =  #{id}
     </delete>
 </mapper>

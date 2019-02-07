@@ -15,8 +15,8 @@
     <select id="getForAdmin" resultType="CommentInfo">
         <include refid="base"/>
         <where>
-            <if test="userId!=null">
-                `comment`.replyId = #{userId}
+            <if test="replyId!=null">
+                `comment`.replyId = #{replyId}
             </if>
             <if test="isDelete!=null">
                 and `comment`.isDelete = #{isDelete}
@@ -33,8 +33,8 @@
         SELECT count(*)
         FROM `comment`
         <where>
-            <if test="userId!=null">
-                `comment`.replyId = #{userId}
+            <if test="replyId!=null">
+                `comment`.replyId = #{replyId}
             </if>
             <if test="isDelete!=null">
                 and `comment`.isDelete = #{isDelete}
@@ -110,8 +110,6 @@
 
     <delete id="delete">
         delete from `comment`
-        <where>
-            id =  #{id}
-        </where>
+        where id =  #{id}
     </delete>
 </mapper>

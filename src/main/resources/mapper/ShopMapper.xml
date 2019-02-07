@@ -3,9 +3,9 @@
 <mapper namespace="com.example.demo.mapper.ShopMapper">
 
     <sql id="base">
-        SELECT shop.id,shop.image,shop.userId,shop.city,
+        SELECT shop.id,shop.image,shop.userId,shop.shopName,shop.city,
                shop.address,shop.applyDate,shop.enterDate,
-               shop.applyState,
+               shop.applyState,shop.state,
                user.`name` as userName
         from shop
         LEFT JOIN `user` on shop.userId = user. id
@@ -22,6 +22,9 @@
             </if>
             <if test="applyState!=null">
                 and `shop`.applyState = #{applyState}
+            </if>
+            <if test="state!=null">
+                and `shop`.state = #{state}
             </if>
         </where>
         ORDER BY id ASC
@@ -41,6 +44,9 @@
             <if test="applyState!=null">
                 and `shop`.applyState = #{applyState}
             </if>
+            <if test="state!=null">
+                and `shop`.state = #{state}
+            </if>
         </where>
     </select>
 
@@ -50,6 +56,16 @@
             `shop`.id = #{id}
         </where>
     </select>
+
+    <insert id="applySK">
+        insert into shop
+        (
+            shopName,image,userId,city,address,applyDate
+        )
+        value (
+            #{shopName},#{image},#{userId},#{city},#{address},#{applyDate}
+        )
+    </insert>
 
     <update id="logicDelete">
         update shop
@@ -74,8 +90,6 @@
 
     <delete id="delete">
         delete from shop
-        <where>
-            id =  #{id}
-        </where>
+        where id =  #{id}
     </delete>
 </mapper>
