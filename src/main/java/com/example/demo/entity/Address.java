@@ -1,7 +1,7 @@
 package com.example.demo.entity;
 
 import com.example.demo.base.BaseEntity;
-
+/**/
 public class Address extends BaseEntity {
     private Integer userId;
     private String receiver;
