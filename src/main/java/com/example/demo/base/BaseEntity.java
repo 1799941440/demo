@@ -1,5 +1,10 @@
 package com.example.demo.base;
 
+/**
+ * @author wz
+ * @description 基本实体类，
+ */
+
 public class BaseEntity {
     private Integer id;
     private Integer isDelete = 0;

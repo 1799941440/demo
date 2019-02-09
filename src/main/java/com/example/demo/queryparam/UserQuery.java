@@ -1,8 +1,8 @@
 package com.example.demo.queryparam;
 
-import com.example.demo.base.BaseParam;
+import com.example.demo.base.BaseQuery;
 
-public class UserQuery extends BaseParam {
+public class UserQuery extends BaseQuery {
     private Integer isDelete;
     private String userName;
 

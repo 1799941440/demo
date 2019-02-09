@@ -13,13 +13,13 @@ import javax.annotation.Resource;
 public class ShopController {
 
     @Resource
-    private IShopService ISService;
+    private IShopService iSService;
 
     @RequestMapping("/getForAdmin")
     public JsonResult getForAdmin(ShopQuery query){
         JsonResult js = new JsonResult();
-        js.add(ISService.getForAdmin(query));
-        js.setTotal(ISService.getCountForAdmin(query));
+        js.add(iSService.getForAdmin(query));
+        js.setTotal(iSService.getCountForAdmin(query));
         return js;
     }
 }

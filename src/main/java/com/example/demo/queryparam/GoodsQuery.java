@@ -1,8 +1,8 @@
 package com.example.demo.queryparam;
 
-import com.example.demo.base.BaseParam;
+import com.example.demo.base.BaseQuery;
 
-public class GoodsQuery extends BaseParam {
+public class GoodsQuery extends BaseQuery {
     private Integer shopId;
     private String name;
     private String classify;

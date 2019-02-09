@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.example.demo.mapper.CommentMapper">
+<mapper namespace="com.example.demo.mapper.CommentMapper"><!-- 左侧的类为需要与xml映射的类
+    名称必须一致，如 CommentMapper.java  和 CommentMapper.xml -->
 
+    <!--    sql标签用于放置基本的查询语句，供其他标签引用
+    引用示范：<include refid="base"/> include标签的refid要和sql标签的id一致    -->
     <sql id="base">
         SELECT `comment`.id,`comment`.themeId,`comment`.reply,`comment`.replyId,
                `comment`.replyTime,
@@ -12,20 +15,22 @@
         LEFT JOIN `user` on `comment`.replyId = `user`.id
     </sql>
 
+    <!--  select的id要和顶部mapper标签的namespace指定的Java文件函数名一致
+      resultType是返回的类型-->
     <select id="getForAdmin" resultType="CommentInfo">
-        <include refid="base"/>
-        <where>
-            <if test="replyId!=null">
+        <include refid="base"/>/* 调用sql标签的语句，节省空间 */
+        <where>/* where标签包围查询条件 */
+            <if test="replyId!=null">/* 一个if带一个条件，如果replyId为空，则if包围的语句不会出现在最终的语句中 */
                 `comment`.replyId = #{replyId}
             </if>
-            <if test="isDelete!=null">
-                and `comment`.isDelete = #{isDelete}
+            <if test="isDelete!=null">/* 第一个if前不用带 and ，之后的都要在语句前加 and */
+                and `comment`.isDelete = #{isDelete}  /*  取对应Java文件的统一的查询参数类里的成员变量 #{变量名} */
             </if>
             <if test="isDelete!=null">
                 and `comment`.themeId = #{themeId}
             </if>
         </where>
-        ORDER BY id ASC
+        ORDER BY id ASC    /* 如果语句不在标签里，则该语句一定会出现在最终的sql语句里 */
         LIMIT #{start},#{rows}
     </select>
 
@@ -80,12 +85,23 @@
         </where>
     </select>
 
+    <select id="getCommentByUserId" resultType="CommentInfo">
+        <include refid="base"/>
+        where `comment`.replyId = #{userId}
+    </select>
+
     <select id="getById" resultType="CommentInfo">
         <include refid="base"/>
         <where>
             `comment`.id = #{id}
         </where>
     </select>
+
+    <!-- select，insert，update，delete 代表查、增、改、删-->
+    <insert id="comment">
+        insert into comment (themeId, reply, replyId)
+        value (#{themeId}, #{reply}, #{replyId})
+    </insert>
 
     <update id="logicDelete">
         update `comment`

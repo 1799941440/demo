@@ -1,8 +1,8 @@
 package com.example.demo.queryparam;
 
-import com.example.demo.base.BaseParam;
+import com.example.demo.base.BaseQuery;
 
-public class CommentQuery extends BaseParam {
+public class CommentQuery extends BaseQuery {
     private Integer themeId;
     private Integer userId;
     private Integer replyId;

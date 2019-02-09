@@ -15,7 +15,7 @@
             goods.delReason,shop.shopName,
             shop.address AS shopAddress,
             ( SELECT count( * ) FROM orderdetail WHERE orderdetail.targetId = goods.id AND orderdetail.type = 1 ) AS sales,
-            ( SELECT count( * ) FROM collect WHERE collect.targetId = goods.id AND collect.type = 1 ) AS collect,
+            ( SELECT count( * ) FROM collect WHERE collect.targetId = goods.id AND collect.type = 1 ) AS collect
         FROM goods
         LEFT JOIN shop ON goods.shopId = shop.id
     </sql>
@@ -34,8 +34,8 @@
             <if test="isDelete!=null">
                 and goods.isDelete = #{isDelete}
             </if>
-            <if test="isDelete!=null">
-                and goods.isDelete = #{isDelete}
+            <if test="state!=null">
+                and goods.state = #{state}
             </if>
         </where>
         ORDER BY id ASC
@@ -58,8 +58,8 @@
             <if test="isDelete!=null">
                 and goods.isDelete = #{isDelete}
             </if>
-            <if test="isDelete!=null">
-                and goods.isDelete = #{isDelete}
+            <if test="state!=null">
+                and goods.state = #{state}
             </if>
         </where>
     </select>
@@ -106,7 +106,7 @@
                 and goods.p3 = #{p3}
             </if>
             and goods.isDelete = 0
-            and goods.isDelete = 0
+            and goods.state = 0
         </where>
         ORDER by sales DESC
         LIMIT #{start},#{rows}
@@ -135,7 +135,7 @@
                 and goods.p3 = #{p3}
             </if>
             and goods.isDelete = 0
-            and goods.isDelete = 0
+            and goods.state = 0
         </where>
     </select>
 
@@ -169,8 +169,6 @@
 
     <delete id="delete">
         delete from goods
-        <where>
-            id =  #{id}
-        </where>
+        where id =  #{id}
     </delete>
 </mapper>

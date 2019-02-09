@@ -3,6 +3,9 @@ package com.example.demo.base;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 后台返回的数据集合
+ */
 public class JsonResult {
 	private boolean success=true;
 	private String msg;

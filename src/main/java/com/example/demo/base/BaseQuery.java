@@ -1,8 +1,21 @@
 package com.example.demo.base;
 
-public class BaseParam {
+/**
+ * @author wz
+ * @description 基本查询参数类
+ */
+public class BaseQuery {
+    /**
+     * 第几页
+     */
     private Integer page = 1;
+    /**
+     * 以几个为一页
+     */
     private Integer rows = 10;
+    /**
+     * 数据库中以多少开始，start = rows*(page-1)
+     */
     private Integer start;
 
     public Integer getPage() {

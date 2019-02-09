@@ -1,8 +1,8 @@
 package com.example.demo.queryparam;
 
-import com.example.demo.base.BaseParam;
+import com.example.demo.base.BaseQuery;
 
-public class ShopQuery extends BaseParam {
+public class ShopQuery extends BaseQuery {
     private Integer userId;
     private Integer isDelete;
     private Integer state;
