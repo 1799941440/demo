@@ -32,4 +32,12 @@ public class AddressController {
         }
         return js;
     }
+
+//    @RequestMapping("/getCommonAddress")
+//    public JsonResult getCommonAddress(Integer userId){
+//        JsonResult js = new JsonResult();
+//        js.add(iAService.getForUser(userId));
+//        js.setTotal(iAService.getCountForUser(userId));
+//        return js;
+//    }
 }
