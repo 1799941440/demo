@@ -7,11 +7,11 @@ import java.util.List;
  * 后台返回的数据集合
  */
 public class JsonResult {
-	private boolean success=true;
-	private String msg;
-	private long total;
-	private int pageSize;
-	private List rows=new ArrayList(0);
+	private boolean success=true;//请求是否成功
+	private String msg;//后台返回的信息
+	private long total;//总数
+	private int pageSize;//当前页有多少个
+	private List rows=new ArrayList(0);//结果集合
 	
 	
 	

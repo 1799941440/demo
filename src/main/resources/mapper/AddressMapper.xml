@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.demo.mapper.AddressMapper">
+
+    <sql id="base">
+        SELECT * from `address`
+    </sql>
+
+    <select id="getForUser" resultType="Address">
+        <include refid="base"/>
+        where `address`.userId = #{userId}
+    </select>
+    <select id="getCountForUser" resultType="Integer">
+        select count(*)
+        from address
+        where `address`.userId = #{userId}
+
+    </select>
+
+    <select id="getById" resultType="Address">
+        <include refid="base"/>
+        <where>
+            `address`.id = #{id}
+        </where>
+    </select>
+
+    <update id="logicDelete">
+        update address
+        <set>
+            isDelete= #{isDelete},
+            delReason = #{delReason}
+        </set>
+        <where>
+            id=#{id}
+        </where>
+    </update>
+
+    <update id="unDelete">
+        update address
+        <set>
+            isDelete=0
+        </set>
+        <where>
+            id=#{id}
+        </where>
+    </update>
+
+    <delete id="delete">
+        delete from address
+        where id =  #{id}
+    </delete>
+</mapper>

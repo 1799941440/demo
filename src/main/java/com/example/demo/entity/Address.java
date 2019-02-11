@@ -3,13 +3,13 @@ package com.example.demo.entity;
 import com.example.demo.base.BaseEntity;
 /**/
 public class Address extends BaseEntity {
-    private Integer userId;
+    private Integer userId;//1
     private String receiver;
     private String contact;
     private String province;
     private String city;
     private String fullAddress;
-    private Integer isCommonAddress;
+    private Integer isCommonAddress;//
 
     public Integer getUserId() {
         return userId;

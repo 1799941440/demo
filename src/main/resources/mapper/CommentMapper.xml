@@ -39,7 +39,7 @@
         FROM `comment`
         <where>
             <if test="replyId!=null">
-                `comment`.replyId = #{replyId}
+            `comment`.replyId = #{replyId}
             </if>
             <if test="isDelete!=null">
                 and `comment`.isDelete = #{isDelete}
