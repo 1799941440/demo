@@ -9,7 +9,7 @@ public class Address extends BaseEntity {
     private String province;
     private String city;
     private String fullAddress;
-    private Integer isCommonAddress;//
+    private Integer isCommonAddress;//2
 
     public Integer getUserId() {
         return userId;
