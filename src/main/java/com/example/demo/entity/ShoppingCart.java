@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.util.Date;
 
-public class Shoppingcart extends BaseEntity {
+public class ShoppingCart extends BaseEntity {
     private Integer userId;
     private Integer goodsId;
     private Integer shopId;
