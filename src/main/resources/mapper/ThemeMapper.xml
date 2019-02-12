@@ -6,7 +6,7 @@
         SELECT theme.id,theme.title,theme.content,theme.images,
                theme.imageCount,theme.userId,theme.goodsId,theme.carId,
                theme.pushTime,theme.type,
-               `user`.`name` as userName,
+               `user`.`serverName` as userName,
                `user`.sex,`user`.age,`user`.icon,
                ( SELECT count( * ) FROM collect WHERE collect.targetId = theme.id AND collect.type = 0 ) AS collect,
                ( SELECT count( * ) FROM zan WHERE zan.targetId = theme.id AND zan.type = 0 ) AS zan,
@@ -50,7 +50,7 @@
         SELECT theme.id,theme.title,theme.content,theme.images,
             theme.imageCount,theme.userId,theme.goodsId,theme.carId,
             theme.pushTime,theme.type,
-            `user`.`name` as userName,
+            `user`.`serverName` as userName,
             `user`.sex,`user`.age,`user`.icon,
             (SELECT COALESCE( count( * ) )
             FROM collect
@@ -66,11 +66,11 @@
             ) AS isZan,
             ( SELECT count( * ) FROM collect WHERE collect.targetId = theme.id AND collect.type = 0 ) AS collect,
             ( SELECT count( * ) FROM zan WHERE zan.targetId = theme.id AND zan.type = 0 ) AS zan,
-            goods.`name` as goodsName,
+            goods.`serverName` as goodsName,
             goods.image as goodsImage,
             goods.price as goodsPrice,
             car.brandId,car.classId,car.disId,
-            carbrand.`name` as carBrand,
+            carbrand.`serverName` as carBrand,
             carclass.className as carClass,
             cardis.displacement as carDis
         from theme

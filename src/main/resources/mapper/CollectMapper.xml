@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.mapper.CollectMapper">
+
+	<sql id="base_theme">
+		SELECT
+			 collect.id AS id,
+			 collect.targetId,
+			 collect.type,
+			 collect.userId,
+			 theme.id as themeId,
+			 theme.ownerId,
+			 theme.title,
+			 theme.content,
+		     theme.images,
+		     theme.imageCount,
+		     theme.type as themeType,
+			 theme.pushTime,
+			 (SELECT COALESCE(count(*)) from  collect where  collect.targetId = theme.id and  collect.type = 0) AS collectTimes,
+			 (SELECT COALESCE(count(*)) from comment where comment.themeId = theme.id) AS commentTimes,
+			 `user`.userName
+		FROM  collect
+		LEFT JOIN theme on theme.id =  collect.targetId
+		LEFT JOIN `user` on `user`.id = theme.ownerId
+	</sql>
+	
+	<sql id="base_goods">
+		SELECT
+			 collect.id AS id,
+			 collect.targetId,
+			 collect.type,
+			 collect.userId,
+			 goods.id as goodsId,
+			 goods.`serverName` AS goodsName,
+			 goods.shopId,
+			 goods.price,
+			 goods.image,
+			 shop.shopName
+		FROM  collect
+		LEFT JOIN goods ON  collect.targetId = goods.id
+		LEFT JOIN shop ON goods.shopId = shop.id
+	</sql>
+
+	<sql id="base_server">
+		SELECT
+			collect.id AS id,
+			collect.targetId,
+			collect.type,
+			collect.userId,
+			`server`.name as serverName,
+			`server`.shopId,
+			`server`.describe,
+			`server`.servePrice,
+			`server`.goodsPrice,
+			`server`.type,
+			shop.shopName,
+		    shop.address as shopAddress
+		FROM  collect
+	    LEFT JOIN `server` ON  collect.targetId = `server`.id
+	    LEFT JOIN shop ON `server`.shopId = shop.id
+	</sql>
+
+	<select id="getThemeCollectByUserId" resultType="CollectThemeInfo">
+		<include refid="base_theme"/>
+		<where>
+			collect.userId = #{userId}
+			and  collect.type = 0
+		</where>
+		ORDER BY id desc
+	</select>
+
+	<select id="getGoodsCollectByUserId" resultType="CollectGoodsInfo">
+		<include refid="base_goods"/>
+		<where>
+			 collect.userId = #{userId}
+			and  collect.type = 1
+		</where>
+		ORDER BY id desc
+	</select>
+
+	<select id="getServerCollectByUserId" resultType="CollectServerInfo">
+		<include refid="base_server"/>
+		<where>
+			 collect.userId = #{userId}
+			and  collect.type = 2
+		</where>
+		ORDER BY id desc
+	</select>
+
+	<delete id="unCollect">
+		DELETE FROM `collect` WHERE ( collect.targetId = #{targetId} 
+		and  collect.userId = #{userId}
+		and  collect.type = #{type})
+	</delete>
+
+	<delete id="unCollectById" parameterType="Integer">
+		DELETE FROM `collect` WHERE
+		collect.id = #{id}
+	</delete>
+
+	<insert id="collect">
+		INSERT INTO `collect` (`targetId`, `userId`, `type`) 
+		VALUES (#{targetId}, #{userId}, #{type})
+	</insert>
+</mapper>

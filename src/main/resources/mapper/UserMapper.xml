@@ -4,7 +4,7 @@
 
     <sql id="base">
         SELECT `user`.id,
-               `user`.`name`,
+               `user`.`serverName`,
                `user`.`password`,
                `user`.identity,
                `user`.phone,
@@ -60,11 +60,11 @@
         <include refid="base"/>
         WHERE
         (
-        name = #{name}
+        serverName = #{serverName}
         AND password = #{password}
         )
         OR (
-        phone =  #{name}
+        phone =  #{serverName}
         AND password = #{password}
         )
         AND `user`.isDelete=0
@@ -72,7 +72,7 @@
 
     <sql id="update">
         <trim suffixOverrides=",">
-            <if test="name!=null">`name`=#{name},</if>
+            <if test="serverName!=null">`serverName`=#{serverName},</if>
             <if test="password!=null">password=#{password},</if>
             <if test="identity!=null">`identity`=#{identity},</if>
             <if test="shopId!=null">shopId=#{shopId},</if>

@@ -6,7 +6,7 @@
         SELECT shop.id,shop.image,shop.userId,shop.shopName,shop.city,
                shop.address,shop.applyDate,shop.enterDate,
                shop.applyState,shop.state,
-               user.`name` as userName
+               user.`serverName` as userName
         from shop
         LEFT JOIN `user` on shop.userId = user. id
     </sql>
