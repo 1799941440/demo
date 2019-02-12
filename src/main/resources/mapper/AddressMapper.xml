@@ -17,6 +17,16 @@
 
     </select>
 
+    <insert id="add">
+        insert into address (userId, receiver, contact, province, city, fullAddress, isCommonAddress)
+        value(#{userId}, #{receiver}, #{contact}, #{province}, #{city}, #{fullAddress}, #{isCommonAddress})
+    </insert>
+
+    <select id="getCommonAddress" resultType="Address">
+        <include refid="base"/>
+        where `address`.userId = #{userId}
+        and `address`.isCommonAddress = 1
+    </select>
     <select id="getById" resultType="Address">
         <include refid="base"/>
         <where>
@@ -24,6 +34,20 @@
         </where>
     </select>
 
+    <update id="update">
+        update address
+        <set>
+          <trim suffixOverrides=",">
+            <if test="receiver!=null">receiver=#{receiver},</if>
+            <if test="contact!=null">contact=#{contact},</if>
+            <if test="province != null">province=#{province},</if>
+            <if test="city != null">city=#{city},</if>
+            <if test="fullAddress != null">fullAddress=#{fullAddress},</if>
+            <if test="isCommonAddress != null">isCommonAddress=#{isCommonAddress}</if>
+          </trim>
+        </set>
+        where  `address`.id = #{id}
+    </update>
     <update id="logicDelete">
         update address
         <set>

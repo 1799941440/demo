@@ -26,6 +26,21 @@ public class AddressService implements IAddressService{
     }
 
     @Override
+    public Integer add(Address address) {
+        return aMapper.add(address);
+    }
+
+    @Override
+    public Address getCommonAddress(Integer userId) {
+        return aMapper.getCommonAddress(userId);
+    }
+
+    @Override
+    public Integer update(Address address) {
+        return aMapper.update(address);
+    }
+
+    @Override
     public List<Address> getForAdmin(AddressQuery addressQuery) {
         return aMapper.getForAdmin(addressQuery);
     }

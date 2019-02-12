@@ -9,4 +9,7 @@ import java.util.List;
 public interface AddressMapper extends BaseMapper<Address,AddressQuery> {
     List<Address> getForUser(Integer userId);
     Integer getCountForUser(Integer userId);
+    Integer add(Address address);
+    Address getCommonAddress(Integer userId);
+    Integer update(Address address);
 }
