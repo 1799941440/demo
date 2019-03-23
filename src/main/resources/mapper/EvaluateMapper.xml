@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.demo.mapper.EvaluateMapper">
+
+    <sql id="base">
+        SELECT evaluate.id,evaluate.userId,evaluate.targetId,evaluate.type,
+               evaluate.star,evaluate.evaluateTime,evaluate.isDelete,evaluate.delReason
+        FROM evaluate
+    </sql>
+
+    <select id="getForAdmin" resultType="EvaluateInfo">
+        <include refid="base"/>
+        <where>
+            <if test="userId!=null">
+                and evaluate.userId = #{userId}
+            </if>
+            <if test="type!=null">
+                and evaluate.type = #{type}
+            </if>
+            <if test="targetId!=null">
+                and evaluate.targetId = #{targetId}
+            </if>
+            <if test="isDelete!=null">
+                and `evaluate`.isDelete = #{isDelete}
+            </if>
+        </where>
+        ORDER BY id ASC
+        LIMIT #{start},#{rows}
+    </select>
+
+    <select id="getCountForAdmin" resultType="Integer">
+        SELECT count(*)
+        FROM `evaluate`
+        <where>
+            <if test="userId!=null">
+                and evaluate.userId = #{userId}
+            </if>
+            <if test="type!=null">
+                and evaluate.type = #{type}
+            </if>
+            <if test="targetId!=null">
+                and evaluate.targetId = #{targetId}
+            </if>
+            <if test="isDelete!=null">
+                and `evaluate`.isDelete = #{isDelete}
+            </if>
+        </where>
+    </select>
+
+    <select id="getGoodsEva" resultType="EvaluateInfo">
+        SELECT evaluate.id,evaluate.userId,evaluate.targetId,evaluate.type,
+               evaluate.star,evaluate.evaluateTime,evaluate.isDelete,evaluate.delReason,
+               goods.name as targetName
+        FROM evaluate
+        left join goods on evaluate.targetId = goods.id
+        <where>
+            <if test="userId!=null">
+                evaluate.userId = #{userId}
+            </if>
+            <if test="targetId!=null">
+                evaluate.targetId = #{targetId}
+            </if>
+            <if test="type!=null">
+                evaluate.type = #{type}
+            </if>
+            <if test="isDelete!=null">
+                evaluate.isDelete = #{isDelete}
+            </if>
+        </where>
+        ORDER BY id ASC
+        LIMIT #{start},#{rows}
+    </select>
+
+    <select id="getJishiEva" resultType="EvaluateInfo">
+        SELECT evaluate.id,evaluate.userId,evaluate.targetId,evaluate.type,
+               evaluate.star,evaluate.evaluateTime,evaluate.isDelete,evaluate.delReason,
+               `user`.name as targetName
+        FROM evaluate
+        left join `user` on evaluate.targetId = `user`.id
+        <where>
+            <if test="userId!=null">
+                evaluate.userId = #{userId}
+            </if>
+            <if test="targetId!=null">
+                evaluate.targetId = #{targetId}
+            </if>
+            <if test="type!=null">
+                evaluate.type = #{type}
+            </if>
+            <if test="isDelete!=null">
+                evaluate.isDelete = #{isDelete}
+            </if>
+        </where>
+        ORDER BY id ASC
+        LIMIT #{start},#{rows}
+    </select>
+
+    <select id="getServerEva" resultType="EvaluateInfo">
+        SELECT evaluate.id,evaluate.userId,evaluate.targetId,evaluate.type,
+               evaluate.star,evaluate.evaluateTime,evaluate.isDelete,evaluate.delReason,
+               `server`.name as targetName
+        FROM evaluate
+        left join `server` on evaluate.targetId = `server`.id
+        <where>
+            <if test="userId!=null">
+                evaluate.userId = #{userId}
+            </if>
+            <if test="targetId!=null">
+                evaluate.targetId = #{targetId}
+            </if>
+            <if test="type!=null">
+                evaluate.type = #{type}
+            </if>
+            <if test="isDelete!=null">
+                evaluate.isDelete = #{isDelete}
+            </if>
+        </where>
+        ORDER BY id ASC
+        LIMIT #{start},#{rows}
+    </select>
+
+    <select id="getShopEva" resultType="EvaluateInfo">
+        SELECT evaluate.id,evaluate.userId,evaluate.targetId,evaluate.type,
+               evaluate.star,evaluate.evaluateTime,evaluate.isDelete,evaluate.delReason,
+               shop.shopName as targetName
+        FROM evaluate
+        left join shop on evaluate.targetId = shop.id
+        <where>
+            <if test="userId!=null">
+                evaluate.userId = #{userId}
+            </if>
+            <if test="targetId!=null">
+                evaluate.targetId = #{targetId}
+            </if>
+            <if test="type!=null">
+                evaluate.type = #{type}
+            </if>
+            <if test="isDelete!=null">
+                evaluate.isDelete = #{isDelete}
+            </if>
+        </where>
+        ORDER BY id ASC
+        LIMIT #{start},#{rows}
+    </select>
+
+    <select id="getCountForUser" resultType="Integer">
+        select count(*)
+        from evaluate
+        <where>
+            <if test="userId!=null">
+                evaluate.userId = #{userId}
+            </if>
+            <if test="targetId!=null">
+                evaluate.targetId = #{targetId}
+            </if>
+            <if test="type!=null">
+                evaluate.type = #{type}
+            </if>
+            <if test="isDelete!=null">
+                evaluate.isDelete = #{isDelete}
+            </if>
+        </where>
+    </select>
+
+    <select id="getById" resultType="EvaluateInfo">
+        <include refid="base"/>
+        <where>
+            `evaluate`.id = #{id}
+        </where>
+    </select>
+
+    <update id="logicDelete">
+        update evaluate
+        <set>
+            isDelete= #{isDelete},
+            delReason = #{delReason}
+        </set>
+        <where>
+            id=#{id}
+        </where>
+    </update>
+
+    <update id="unDelete">
+        update evaluate
+        <set>
+            isDelete=0
+        </set>
+        <where>
+            id=#{id}
+        </where>
+    </update>
+
+    <delete id="delete">
+        delete from evaluate
+        where id =  #{id}
+    </delete>
+</mapper>

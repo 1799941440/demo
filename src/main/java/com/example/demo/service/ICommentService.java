@@ -16,4 +16,5 @@ public interface ICommentService extends IBaseService<CommentInfo, CommentQuery>
     Integer getCountForUser(CommentQuery q);
     Integer comment(CommentParam c);
     List<CommentInfo> getCommentByUserId(Integer userId);
+    CommentInfo getMostZan(Integer themeId);
 }

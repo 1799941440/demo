@@ -6,10 +6,11 @@
         SELECT theme.id,theme.title,theme.content,theme.images,
                theme.imageCount,theme.userId,theme.goodsId,theme.carId,
                theme.pushTime,theme.type,
-               `user`.`serverName` as userName,
+               `user`.`name` as userName,
                `user`.sex,`user`.age,`user`.icon,
                ( SELECT count( * ) FROM collect WHERE collect.targetId = theme.id AND collect.type = 0 ) AS collect,
-               ( SELECT count( * ) FROM zan WHERE zan.targetId = theme.id AND zan.type = 0 ) AS zan,
+               ( SELECT count( * ) FROM `comment` WHERE `comment`.themeId = theme.id) AS `comment`,
+               ( SELECT count( * ) FROM zan WHERE zan.targetId = theme.id AND zan.type = 0 ) AS zan
         from theme
         LEFT JOIN `user` on theme.userId = `user`.id
     </sql>
@@ -50,7 +51,7 @@
         SELECT theme.id,theme.title,theme.content,theme.images,
             theme.imageCount,theme.userId,theme.goodsId,theme.carId,
             theme.pushTime,theme.type,
-            `user`.`serverName` as userName,
+            `user`.`name` as userName,
             `user`.sex,`user`.age,`user`.icon,
             (SELECT COALESCE( count( * ) )
             FROM collect
@@ -66,11 +67,12 @@
             ) AS isZan,
             ( SELECT count( * ) FROM collect WHERE collect.targetId = theme.id AND collect.type = 0 ) AS collect,
             ( SELECT count( * ) FROM zan WHERE zan.targetId = theme.id AND zan.type = 0 ) AS zan,
-            goods.`serverName` as goodsName,
+            ( SELECT count( * ) FROM `comment` WHERE `comment`.themeId = theme.id) AS `comment`,
+            goods.`name` as goodsName,
             goods.image as goodsImage,
             goods.price as goodsPrice,
             car.brandId,car.classId,car.disId,
-            carbrand.`serverName` as carBrand,
+            carbrand.`name` as carBrand,
             carclass.className as carClass,
             cardis.displacement as carDis
         from theme

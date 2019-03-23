@@ -23,7 +23,7 @@ public class CollectController{
     private ICollectService iCService;
 
     @RequestMapping("/getCollectByUserId")
-    public JsonResult getGoodsCollectByUserId(Integer userId,Integer type)throws Exception{
+    public JsonResult getGoodsCollectByUserId(Integer userId,Integer type){
         JsonResult js = new JsonResult();
         if(type == 0){
             js.add(iCService.getThemeCollectByUserId(userId));

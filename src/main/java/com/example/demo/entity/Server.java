@@ -8,6 +8,8 @@ public class Server extends BaseEntity {
     private String describe;
     private float servePrice;
     private float goodsPrice;
+    private String goodsId;
+    private String goodsNum;
     private Integer type;
     private Integer state;
 
@@ -25,6 +27,22 @@ public class Server extends BaseEntity {
 
     public void setShopId(Integer shopId) {
         this.shopId = shopId;
+    }
+
+    public String getGoodsId() {
+        return goodsId;
+    }
+
+    public void setGoodsId(String goodsId) {
+        this.goodsId = goodsId;
+    }
+
+    public String getGoodsNum() {
+        return goodsNum;
+    }
+
+    public void setGoodsNum(String goodsNum) {
+        this.goodsNum = goodsNum;
     }
 
     public String getDescribe() {

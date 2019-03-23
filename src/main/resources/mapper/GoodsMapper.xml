@@ -5,11 +5,12 @@
     <sql id="base_admin">
         SELECT
             goods.id,goods.shopId,
-            goods.`serverName`,goods.classify,
+            goods.`name`,goods.classify,
             goods.brand,goods.capacity,
             goods.weight,goods.unit,
             goods.p1,goods.p2,goods.p3,
             goods.count,goods.price,
+            goods.state,
             goods.image,goods.isDelete,
             goods.`describe`,goods.isDelete,
             goods.delReason,shop.shopName,
@@ -25,8 +26,8 @@
             <if test="shopId!=null">
                 shopId = #{shopId}
             </if>
-            <if test="serverName!=null">
-                and goods.`serverName` LIKE '%${serverName}%'
+            <if test="name!=null">
+                and goods.`name` LIKE '%${name}%'
             </if>
             <if test="classify!=null">
                 and goods.classify = #{classify}
@@ -49,8 +50,8 @@
             <if test="shopId!=null">
                 shopId = #{shopId}
             </if>
-            <if test="serverName!=null">
-                and goods.`serverName` LIKE '%${serverName}%'
+            <if test="name!=null">
+                and goods.`name` LIKE '%${name}%'
             </if>
             <if test="classify!=null">
                 and goods.classify = #{classify}
@@ -67,7 +68,7 @@
     <select id="getForUser" resultType="GoodsInfo">
         SELECT
         goods.id,goods.shopId,
-        goods.`serverName`,goods.classify,
+        goods.`name`,goods.classify,
         goods.brand,goods.capacity,
         goods.weight,goods.unit,
         goods.p1,goods.p2,goods.p3,
@@ -87,8 +88,8 @@
         FROM goods
         LEFT JOIN shop ON goods.shopId = shop.id
         <where>
-            <if test="serverName!=null">
-                goods.`serverName` LIKE '%${serverName}%'
+            <if test="name!=null">
+                goods.`name` LIKE '%${name}%'
             </if>
             <if test="classify!=null">
                 and goods.classify = #{classify}
@@ -116,8 +117,8 @@
         SELECT count(*)
         FROM goods
         <where>
-            <if test="serverName!=null">
-                goods.`serverName` LIKE '%${serverName}%'
+            <if test="name!=null">
+                goods.`name` LIKE '%${name}%'
             </if>
             <if test="classify!=null">
                 and goods.classify = #{classify}

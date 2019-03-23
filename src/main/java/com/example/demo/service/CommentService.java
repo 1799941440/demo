@@ -45,6 +45,11 @@ public class CommentService implements ICommentService{
     }
 
     @Override
+    public CommentInfo getMostZan(Integer themeId) {
+        return cMapper.getMostZan(themeId);
+    }
+
+    @Override
     public List<CommentInfo> getForAdmin(CommentQuery commentQuery) {
         return cMapper.getForAdmin(commentQuery);
     }

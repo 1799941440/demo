@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.demo.mapper.ServerMapper">
+
+    <sql id="base">
+        SELECT `server`.id,`server`.`describe`,`server`.delReason,`server`.goodsId,`server`.goodsNum,`server`.isDelete,`server`.`name`,
+               `server`.servePrice,`server`.shopId,`server`.state,`server`.type,shop.shopName
+        FROM `server`
+                 LEFT JOIN shop on `server`.shopId = shop.id
+    </sql>
+
+    <select id="getForAdmin" resultType="ServerInfo">
+        <include refid="base"/>
+        <where>
+            <if test="isDelete!=null">
+                and `server`.isDelete = #{isDelete}
+            </if>
+        </where>
+        ORDER BY id ASC
+        LIMIT #{start},#{rows}
+    </select>
+
+    <select id="getForUser" resultType="ServerInfo">
+        SELECT `server`.id,`server`.`describe`,`server`.delReason,`server`.goodsId,`server`.goodsNum,`server`.isDelete,`server`.`name`,
+               `server`.servePrice,`server`.shopId,`server`.state,`server`.type,shop.shopName,
+               ( SELECT count( * ) FROM collect WHERE collect.targetId = `server`.id AND collect.type = 2 and collect.userId = #{userId}) AS isCollect
+        FROM `server`
+        LEFT JOIN shop on `server`.shopId = shop.id
+        <where>
+            <if test="shopId!=null">
+                `server`.shopId = ${shopId}
+            </if>
+            <if test="type!=null">
+                and `server`.type = ${type}
+            </if>
+            and `server`.state = 0 and `server`.isDelete = 0
+        </where>
+        ORDER BY id ASC
+        LIMIT #{start},#{rows}
+    </select>
+
+    <select id="getCountForUser" resultType="Integer">
+        select count(*)
+        from `server`
+        <where>
+            <if test="shopId!=null">
+                `server`.shopId = ${shopId}
+            </if>
+            <if test="type!=null">
+                and `server`.type = ${type}
+            </if>
+            and `server`.state = 0 and `server`.isDelete = 0
+        </where>
+    </select>
+
+    <select id="getCountForAdmin" resultType="Integer">
+        SELECT count(*)
+        FROM `server`
+        <where>
+            <if test="isDelete!=null">
+                and `server`.isDelete = #{isDelete}
+            </if>
+        </where>
+    </select>
+
+    <select id="getById" resultType="ServerInfo">
+        <include refid="base"/>
+        <where>
+            `server`.id = #{id}
+        </where>
+    </select>
+
+    <update id="logicDelete">
+        update `server`
+        <set>
+            isDelete= #{isDelete},
+            delReason = #{delReason}
+        </set>
+        <where>
+            id=#{id}
+        </where>
+    </update>
+
+    <update id="unDelete">
+        update `server`
+        <set>
+            isDelete=0
+        </set>
+        <where>
+            id=#{id}
+        </where>
+    </update>
+
+    <delete id="delete">
+        delete from `server`
+        where id = #{id}
+    </delete>
+</mapper>

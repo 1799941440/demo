@@ -39,4 +39,6 @@ public interface CommentMapper extends BaseMapper<CommentInfo, CommentQuery> {
      * @return
      */
     List<CommentInfo> getCommentByUserId(Integer userId);
+
+    CommentInfo getMostZan(Integer themeId);
 }

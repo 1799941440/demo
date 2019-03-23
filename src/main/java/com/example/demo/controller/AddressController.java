@@ -44,7 +44,8 @@ public class AddressController {
     public JsonResult addAddress(Address address){
         JsonResult js = new JsonResult();
         Address addA;//存放address对应的user的常用收货地址对象
-        if(address.getIsCommonAddress() == 0){//要添加的地址不是常用
+        if(address.getIsCommonAddress() == 0){
+            //要添加的地址不是常用
             if (iAService.add(address) == 1) {
                 js.setMsg("添加收货地址成功");
             }else{

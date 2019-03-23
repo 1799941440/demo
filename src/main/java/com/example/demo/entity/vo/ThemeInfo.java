@@ -8,9 +8,27 @@ public class ThemeInfo extends Theme {
     private Integer isZan;
     private Integer collect;
     private Integer zan;
+    private Integer comment;
     private String sex;
     private String icon;
     private String age;
+    private String mostZan;
+
+    public Integer getComment() {
+        return comment;
+    }
+
+    public void setComment(Integer comment) {
+        this.comment = comment;
+    }
+
+    public String getMostZan() {
+        return mostZan;
+    }
+
+    public void setMostZan(String mostZan) {
+        this.mostZan = mostZan;
+    }
 
     //帖子里的附带商品信息
     private String goodsName;

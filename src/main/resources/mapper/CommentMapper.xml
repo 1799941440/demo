@@ -8,7 +8,7 @@
     <sql id="base">
         SELECT `comment`.id,`comment`.themeId,`comment`.reply,`comment`.replyId,
                `comment`.replyTime,
-               `user`.`serverName` as userName,
+               `user`.`name` as userName,
                `user`.sex,`user`.age,`user`.icon,
                ( SELECT count( * ) FROM zan WHERE zan.targetId = `comment`.id AND zan.type = 1 ) AS zan
         FROM `comment`
@@ -53,7 +53,7 @@
     <select id="getForUser" resultType="CommentInfo">
         SELECT `comment`.id,`comment`.themeId,`comment`.reply,`comment`.replyId,
                `comment`.replyTime,
-               `user`.`serverName` as userName,
+               `user`.`name` as userName,
                `user`.sex,`user`.age,`user`.icon,
                (SELECT COALESCE( count( * ) )
                 FROM zan
@@ -88,6 +88,19 @@
     <select id="getCommentByUserId" resultType="CommentInfo">
         <include refid="base"/>
         where `comment`.replyId = #{userId}
+    </select>
+
+    <select id="getMostZan" resultType="CommentInfo">
+        SELECT `comment`.id,`comment`.themeId,`comment`.reply,`comment`.replyId,
+        `comment`.replyTime,
+        `user`.`name` as userName,
+        `user`.sex,`user`.age,`user`.icon,
+        ( SELECT count( * ) FROM zan WHERE zan.targetId = `comment`.id AND zan.type = 1 ) AS zan
+        FROM `comment`
+        LEFT JOIN `user` on `comment`.replyId = `user`.id
+        where `comment`.themeId = #{themeId}
+        ORDER BY zan DESC
+        LIMIT 0,1
     </select>
 
     <select id="getById" resultType="CommentInfo">
